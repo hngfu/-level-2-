@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+
+        baseball_game();
+
+        function baseball_game() {
+            var answer = ran_answer();
+            do {
+                var question = prompt("숫자를 입력해주세요 ex)123 : ");
+                informer(answer,question);
+            } while (strike(answer,question) < 3)
+        }
+
+
+        function ran_answer() {
+            var number = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            var answer = [];
+            for (var i = 0; i < 3; i++) {
+                var ran_num = Math.floor(Math.random() * number.length);
+                answer[i] = number[ran_num];
+                number.splice(ran_num, 1);
+            }
+            return answer;
+        }
+
+        // function validity_check(){
+        //     var question = prompt("숫자를 입력해주세요 ex)123 : ");
+        // }
+
+        function informer(answer,question) {
+            var strike_num = strike(answer,question);
+            var ball_num = ball(answer,question);
+            if (strike_num == 3) {
+                alert("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+            } else if (strike_num > 0) {
+                alert(strike_num + " 스트라이크 ");
+            }
+            if (ball_num > 0) {
+                alert(ball_num + "볼");
+            } else if (strike_num == 0) {
+                alert("낫싱");
+            }
+        }
+
+        // function strike_info() {
+        //     var strike_num = strike();
+        //     if (strike_num == 3) {
+        //         console.log("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
+        //     } else if (strike_num == 1 || 2) {
+        //         console.log(strike_num + " 스트라이크 ");
+        //     }
+        // }
+
+        function strike(answer,question) {
+            var strike_num = 0;
+            for (var i = 0; i < 3; i++) {
+                if (question[i] == answer[i]) {
+                    strike_num++;
+                }
+            }
+            return strike_num;
+        }
+
+        // function ball_info(){
+        //     var ball_num = ball();
+        //     if (ball_num>0){
+        //         console.log(ball_num+"볼");
+        //     }
+
+        // }
+
+        function ball(answer,question) {
+            var ball_num = 0;
+            for (var i = 0; i < 3; i++) {
+                if (question[i] == answer[num_limit_helper(i + 1)]) {
+                    ball_num++;
+                } else if (question[i] == answer[num_limit_helper(i + 2)]) {
+                    ball_num++;
+                }
+            }
+            return ball_num;
+        }
+
+        function num_limit_helper(i) {
+            if (i > 2) {
+                i = i - 3;
+            }
+            return i;
+        }
+
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
