@@ -1,100 +1,95 @@
+<!--
+    야구게임(코드스쿼드 2레벨 신청 문제)
+    전에 만든 프로그램이 많이 부족한 것 같아 1레벨 강의 전부 듣고 수정합니다.
+    조재흥 2018-08-13
+-->
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 
 <head>
-    <script>
-
-        baseball_game();
-
-        function baseball_game() {
-            var answer = ran_answer();
-            do {
-                var question = prompt("숫자를 입력해주세요 ex)123 : ");
-                informer(answer,question);
-            } while (strike(answer,question) < 3)
-        }
-
-
-        function ran_answer() {
-            var number = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-            var answer = [];
-            for (var i = 0; i < 3; i++) {
-                var ran_num = Math.floor(Math.random() * number.length);
-                answer[i] = number[ran_num];
-                number.splice(ran_num, 1);
-            }
-            return answer;
-        }
-
-        // function validity_check(){
-        //     var question = prompt("숫자를 입력해주세요 ex)123 : ");
-        // }
-
-        function informer(answer,question) {
-            var strike_num = strike(answer,question);
-            var ball_num = ball(answer,question);
-            if (strike_num == 3) {
-                alert("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
-            } else if (strike_num > 0) {
-                alert(strike_num + " 스트라이크 ");
-            }
-            if (ball_num > 0) {
-                alert(ball_num + "볼");
-            } else if (strike_num == 0) {
-                alert("낫싱");
-            }
-        }
-
-        // function strike_info() {
-        //     var strike_num = strike();
-        //     if (strike_num == 3) {
-        //         console.log("3개의 숫자를 모두 맞히셨습니다! 게임 종료");
-        //     } else if (strike_num == 1 || 2) {
-        //         console.log(strike_num + " 스트라이크 ");
-        //     }
-        // }
-
-        function strike(answer,question) {
-            var strike_num = 0;
-            for (var i = 0; i < 3; i++) {
-                if (question[i] == answer[i]) {
-                    strike_num++;
-                }
-            }
-            return strike_num;
-        }
-
-        // function ball_info(){
-        //     var ball_num = ball();
-        //     if (ball_num>0){
-        //         console.log(ball_num+"볼");
-        //     }
-
-        // }
-
-        function ball(answer,question) {
-            var ball_num = 0;
-            for (var i = 0; i < 3; i++) {
-                if (question[i] == answer[num_limit_helper(i + 1)]) {
-                    ball_num++;
-                } else if (question[i] == answer[num_limit_helper(i + 2)]) {
-                    ball_num++;
-                }
-            }
-            return ball_num;
-        }
-
-        function num_limit_helper(i) {
-            if (i > 2) {
-                i = i - 3;
-            }
-            return i;
-        }
-
-    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>baseball game</title>
 </head>
 
 <body>
+    <h1>코드스쿼드 2레벨 신청 문제</h1>
+    <h2>야구 게임</h2>
+    <p>숫자를 입력해주세요 ex)123</p>
+    <input type='text' id='inputNum'>
+    <button onclick="num.isCorrect()">확인</button>
+    <div id='outputArea'></div>
+
+    <script>
+        var num = {};
+        num.challenge = 1;
+        num.outputMessage = num.challenge + '번째 도전 결과: ';
+        num.set = function () {
+            this.correct = [];
+            var limitNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            while (this.correct.length < 3) {
+                this.correct.push(limitNum.splice(Math.floor(Math.random() * limitNum.length), 1)[0]);
+            }
+        };
+        
+
+        num.isCorrect = function () {
+            var tempNum = document.getElementById('inputNum').value;
+            var outputArea = document.getElementById('outputArea');
+            var mkOutput = document.createElement("p");
+            if (this.validCheck(tempNum)) {
+                this.strike(tempNum);
+                //ball
+                //nothing
+                //성공
+                console.log(this.challenge, this.correct, tempNum);
+                mkOutput.innerHTML = this.outputMessage;
+                outputArea.appendChild(mkOutput);
+                this.challenge++;
+            }
+        };
+
+        num.strike = function (num) {
+            var strikeNum = 0;
+            for (var i = 0; i < 3; i++) {
+                if (this.correct[i] === num[i]) {
+                    strikeNum++;
+                }
+            }
+            if (strikeNum > 0) {
+                console.log('굳');
+                this.outputMessage += strikeNum + "스트라이크 ";
+            }
+        };
+
+        num.ball = function (num) {
+            var ballNum = 0;
+            for (var i = 0; i < 3; i++){
+                
+            }
+        };
+
+        num.validCheck = function (num) {
+            if (!(num.length === 3)) {
+                alert("숫자 '3'개만 입력해 주세요.");
+                return false;
+            }
+            for (var i = 0; i < num.length; i++) {
+                if (!(num[i] > 0 && num[i] < 10)) {
+                    alert("1부터 9까지의 수만 입력해 주세요.");
+                    return false;
+                }
+            }
+            if (num[0] === num[1] || num[0] === num[2] || num[1] === num[2]) {
+                alert("숫자가 중복되지 않게 입력해 주세요.");
+                return false;
+            }
+            return true;
+        };
+
+        num.set();
+    </script>
 </body>
 
 </html>
