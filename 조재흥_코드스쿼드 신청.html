@@ -23,65 +23,94 @@
 
     <script>
         var num = {};
-        num.challenge = 1;
-        num.outputMessage = num.challenge + '번째 도전 결과: ';
+
+        //랜덤하지만 중복되지 않는 값 3개 저장
         num.set = function () {
             this.correct = [];
+            this.strikeNum = 0;
+            this.ballNum = 0;
+
             var limitNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
             while (this.correct.length < 3) {
                 this.correct.push(limitNum.splice(Math.floor(Math.random() * limitNum.length), 1)[0]);
             }
         };
-        
 
+        //입력한 수와 컴퓨터의 수를 비교 - 야구 게임 시작
         num.isCorrect = function () {
-            var tempNum = document.getElementById('inputNum').value;
-            var outputArea = document.getElementById('outputArea');
-            var mkOutput = document.createElement("p");
-            if (this.validCheck(tempNum)) {
-                this.strike(tempNum);
-                //ball
-                //nothing
-                //성공
-                console.log(this.challenge, this.correct, tempNum);
-                mkOutput.innerHTML = this.outputMessage;
-                outputArea.appendChild(mkOutput);
-                this.challenge++;
+            this.ballNum = 0;
+            this.strikeNum = 0;
+            this.compare = document.getElementById('inputNum').value.split('');
+            if (this.validCheck()) {
+                for (var i = 0; i < 3; i++) {
+                    this.judgment(i);
+                }
+                this.output();
+                console.log(this.correct, this.compare);
+                console.log(this.ballNum, this.strikeNum);
             }
         };
 
-        num.strike = function (num) {
-            var strikeNum = 0;
+        //입력값을 판단
+        num.judgment = function (count) {
             for (var i = 0; i < 3; i++) {
-                if (this.correct[i] === num[i]) {
-                    strikeNum++;
+                if (count === i) {
+                    this.strike(count, i);
+                } else {
+                    this.ball(count, i);
                 }
             }
-            if (strikeNum > 0) {
-                console.log('굳');
-                this.outputMessage += strikeNum + "스트라이크 ";
+        };
+
+        //스트라이크가 몇인지 판단
+        num.strike = function (count, i) {
+            if (this.correct[count] === this.compare[i]) {
+                this.strikeNum++;
             }
         };
 
-        num.ball = function (num) {
-            var ballNum = 0;
-            for (var i = 0; i < 3; i++){
-                
+        //볼이 몇인지를 판단
+        num.ball = function (count, i) {
+            if (this.correct[count] === this.compare[i]) {
+                this.ballNum++;
             }
         };
+        
+        //출력
+        num.output = function () {
+            var ret = this.result();
+            alert(ret);
+        };
+        
+        //결과값 저장
+        num.result = function () {
+            var ret = '';
+            if (this.strikeNum === 3) {
+                ret += '3개의 숫자를 모두 맞히셨습니다! 게임 종료';
+            } else if (this.strikeNum > 0) {
+                ret += this.strikeNum + '스트라이크 ';
+            }
+            if (this.ballNum > 0) {
+                ret += this.ballNum + '볼 ';
+            } else if (this.strikeNum === 0 && this.ballNum === 0) {
+                ret += '낫싱';
+            }
+            return ret;
+        };
 
-        num.validCheck = function (num) {
-            if (!(num.length === 3)) {
+        //입력값 유효성 검사
+        num.validCheck = function () {
+            if (!(this.compare.length === 3)) {
                 alert("숫자 '3'개만 입력해 주세요.");
                 return false;
             }
-            for (var i = 0; i < num.length; i++) {
-                if (!(num[i] > 0 && num[i] < 10)) {
+            for (var i = 0; i < this.compare.length; i++) {
+                if (!(this.compare[i] > 0 && this.compare[i] < 10)) {
                     alert("1부터 9까지의 수만 입력해 주세요.");
                     return false;
                 }
             }
-            if (num[0] === num[1] || num[0] === num[2] || num[1] === num[2]) {
+            if (this.compare[0] === this.compare[1] || this.compare[0] === this.compare[2] || this.compare[1] === this.compare[2]) {
                 alert("숫자가 중복되지 않게 입력해 주세요.");
                 return false;
             }
