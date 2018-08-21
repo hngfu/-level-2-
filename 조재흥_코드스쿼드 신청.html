@@ -30,9 +30,10 @@
             this.strikeNum = 0;
             this.ballNum = 0;
             this.challenge = 1;
+            this.ofNum = 3;
 
             var limitNum = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
-            while (this.correct.length < 3) {
+            while (this.correct.length < this.ofNum) {
                 this.correct.push(limitNum.splice(Math.floor(Math.random() * limitNum.length), 1)[0]);
             }
         };
@@ -43,16 +44,16 @@
             this.strikeNum = 0;
             this.compare = document.getElementById('inputNum').value.split('');
             if (this.validCheck()) {
-                for (var i = 0; i < 3; i++) {
+                for (var i = 0; i < this.ofNum; i++) {
                     this.judgment(i);
                 }
                 this.output();
             }
         };
 
-        //입력값을 판단
+        //볼과 스트라이크가 몇개인지 판단
         num.judgment = function (count) {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < this.ofNum; i++) {
                 if (this.correct[count] === this.compare[i] && count === i) {
                     this.strikeNum++;
                 } else if (this.correct[count] === this.compare[i]) {
@@ -76,8 +77,8 @@
         //결과값 저장
         num.result = function () {
             var ret = this.challenge + '번째 도전) 입력값: [' + this.compare + '] - ';
-            if (this.strikeNum === 3) {
-                ret += '3개의 숫자를 모두 맞히셨습니다! 게임 종료';
+            if (this.strikeNum === this.ofNum) {
+                ret += this.ofNum + '개의 숫자를 모두 맞히셨습니다! 게임 종료';
             } else if (this.strikeNum > 0) {
                 ret += this.strikeNum + '스트라이크 ';
             }
@@ -91,8 +92,8 @@
 
         //입력값 유효성 검사
         num.validCheck = function () {
-            if (!(this.compare.length === 3)) {
-                alert("숫자 '3'개만 입력해 주세요.");
+            if (!(this.compare.length === this.ofNum)) {
+                alert("숫자 '" + this.ofNum + "'개만 입력해 주세요.");
                 return false;
             }
             for (var i = 0; i < this.compare.length; i++) {
