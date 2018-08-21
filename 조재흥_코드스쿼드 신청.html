@@ -53,25 +53,11 @@
         //입력값을 판단
         num.judgment = function (count) {
             for (var i = 0; i < 3; i++) {
-                if (count === i) {
-                    this.strike(count, i);
-                } else {
-                    this.ball(count, i);
+                if (this.correct[count] === this.compare[i] && count === i) {
+                    this.strikeNum++;
+                } else if (this.correct[count] === this.compare[i]) {
+                    this.ballNum++;
                 }
-            }
-        };
-
-        //스트라이크가 몇인지 판단
-        num.strike = function (count, i) {
-            if (this.correct[count] === this.compare[i]) {
-                this.strikeNum++;
-            }
-        };
-
-        //볼이 몇인지를 판단
-        num.ball = function (count, i) {
-            if (this.correct[count] === this.compare[i]) {
-                this.ballNum++;
             }
         };
 
